@@ -23,15 +23,32 @@ def get_all_products():
 # def get_product_by_id( ):
 #      return products[0] #this will return first product
 
+
 @app.get("/product/{id}")
 def get_product_by_id(id: int):
      for product in products:
            if product.id == id :
             return product
-           
      return "Product not found"
+
 
 @app.post("/product")
 def add_product(product: Product):
     products.append(product)
     return product  
+
+@app.put("/product")
+def update_product(id: int , product: Product):
+    for i in range(len(products)):
+        if products[i].id == id:
+            products[i] = product
+            return "Product added Successfully"
+    return "No Product Found"
+
+@app.delete("/product")
+def delete_product(id: int):
+    for i in range(len(products)):
+        if products[i].id == id:
+            del products[i]
+            return 'Product Deleted Successfully'
+    return "Product Not Found"
