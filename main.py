@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from models import Product
+from database import session
 
 app = FastAPI()
 
@@ -16,6 +17,12 @@ products = [
 
 @app.get("/products")
 def get_all_products():
+     
+     #db connection
+     db = session()
+
+     #query
+     db.query()
      return products
 
 

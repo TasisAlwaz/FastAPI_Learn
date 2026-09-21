@@ -56,4 +56,3 @@ The application will be available at `http://127.0.0.1:8000`.
 * [ ] Deploy the API to a cloud platform (e.g., Render or AWS).
 
 ---
-*Feel free to star ⭐ this repository if you find my learning journey helpful!*
