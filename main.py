@@ -66,22 +66,45 @@ def get_product_by_id(id: int, db: Session = Depends(get_db)):
 
 
 @app.post("/product")
-def add_product(product: Product):
-    products.append(product)
+def add_product(product: Product, db: Session = Depends(get_db)):
+    # products.append(product)
+    db.add(database_models.Product(**product.model_dump()))
+    db.commit()
     return product  
 
 @app.put("/product")
-def update_product(id: int , product: Product):
-    for i in range(len(products)):
-        if products[i].id == id:
-            products[i] = product
-            return "Product added Successfully"
-    return "No Product Found"
+def update_product(id: int , product: Product, db: Session = Depends(get_db)):
+    # for i in range(len(products)):
+    #     if products[i].id == id:
+    #         products[i] = product
+    #         return "Product added Successfully"
 
+    db_product = db.query(database_models.Product).filter(database_models.Product.id == id).first() 
+
+    if db_product:
+         db_product.name = product.name
+         db_product.description = product.description
+         db_product.price = product.price
+         db_product.quantity = product.quantity
+         db.commit()  #this commit code is used to save the changes in database
+         return "Product updated"
+    else:
+        return "No Product Found"
+ 
 @app.delete("/product")
-def delete_product(id: int):
-    for i in range(len(products)):
-        if products[i].id == id:
-            del products[i]
-            return 'Product Deleted Successfully'
-    return "Product Not Found"
+def delete_product(id: int, db: Session = Depends(get_db)):
+    # for i in range(len(products)):
+    #     if products[i].id == id:
+    #         del products[i]
+    #         return 'Product Deleted Successfully'
+
+    db_product = db.query(database_models.Product).filter(database_models.Product.id == id).first()
+    #Fetching product from the database
+
+    if db_product:
+        db.delete(db_product)
+        db.commit()
+    else:
+        return "Product Not Found"
+
+    
